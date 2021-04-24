@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SPECIFIC="blue" # ### ReplaceAll(line, "blue", color)
+SPECIFIC="red" # ### ReplaceAll(line, "red", color)
 
 # echo "Debug output: SPECIFIC=$SPECIFIC" # ### sh.uncommentIf(debug, line)
 

@@ -2,6 +2,8 @@
 
 The *Go Language Facilitator* tool is used to process in-file code while copying a source to a destination file. It is basically helpful when different files are required for other build destinations, but templating is not provided out-of-the-box. This gives you the possibility to have different content in files for e.g. local and server builds.
 
+![](https://github.com/jurjevic/golf/blob/main/example/simple/tty.gif)
+
 ##  Install
 ```sh
 #  Version: 0.8 (work-in-progress)
@@ -219,10 +221,39 @@ echo "world" ## Join(token[1:], " ")
 ```
 The processing is ignored, because the token `###` is missing (including before and after a whitespace).
 
-### Testable example
-* [gen.sh](https://github.com/jurjevic/golf/blob/main/example/gen.sh) Call example for `golf` command.
-* [blue.sh](https://github.com/jurjevic/golf/blob/main/example/blue.sh) Input file with simple examples.
-* [sh.go](https://github.com/jurjevic/golf/blob/main/example/sh.go) Helper functions for shell processing.
+### Testable simple example
+* [red.sh](https://github.com/jurjevic/golf/blob/main/example/simple/red.sh) Input file with simple example.
+```sh
+# run without processing
+chmod +x red.sh && ./red.sh
+
+# perform processing
+golf red.sh blue.sh
+
+# run processed example
+chmod +x blue.sh && ./blue.sh
+```
+
+### Testable advanced example
+* [gen.sh](https://github.com/jurjevic/golf/blob/main/example/advanced/gen.sh) Call example for `golf` command.
+* [red.sh](https://github.com/jurjevic/golf/blob/main/example/advanced/red.sh) Input file with advanced examples.
+* [sh.go](https://github.com/jurjevic/golf/blob/main/example/advanced/sh.go) Helper functions for shell processing.
+```sh
+# run without processing
+chmod +x red.sh && ./red.sh
+
+# perform processing
+./gen.sh
+
+# run processed example
+chmod +x blue.sh && ./blue.sh
+
+# perform another processing
+./gen.sh green
+
+# run green processed example
+chmod +x green.sh && ./green.sh
+```
 
 ## Credits
 *golf* is uses [github.com/traefik/yaegi](https://github.com/traefik/yaegi) as the Go language interpreter.
