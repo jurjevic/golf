@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	version = "0.8 [wip]"
+	version = "0.8.0"
 )
 
 // golf is a line facilitator which acts like preprocessor based on the go language syntax.

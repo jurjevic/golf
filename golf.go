@@ -6,6 +6,7 @@ import (
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"reflect"
 	"strings"
@@ -148,13 +149,32 @@ func (g *golf) processFile(filename string, verbose bool) string {
 
 func (g *golf) include(inc string, verbose bool) {
 	if verbose {
-		fmt.Printf("Including: %s", inc)
+		fmt.Printf("Including: %s\n", inc)
 	}
+	if strings.HasPrefix(strings.ToLower(inc), "https://") ||
+		strings.HasPrefix(strings.ToLower(inc), "http://") {
+		g.includeHttp(inc)
+	} else {
+		g.includeFile(inc)
+	}
+}
+
+func (g *golf) includeHttp(inc string) {
+	resp, err := http.Get(inc)
+	checkFail(err, "Include could not be loaded from " + inc)
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkFail(err, "Include could not be read from " + inc)
+	_, err = g.interpreter.Eval(string(body))
+	checkFail(err, "File could not be included: "+inc)
+}
+
+func (g *golf) includeFile(inc string) {
 	checkFile(inc)
 	content, err := ioutil.ReadFile(inc)
-	checkFail(err, "File could not be loaded: " + inc)
-	source := string(content)
-	g.interpreter.Eval(source)
+	checkFail(err, "File could not be loaded: "+inc)
+	_, err = g.interpreter.Eval(string(content))
+	checkFail(err, "File could not be included: "+inc)
 }
 
 func getGoLineFunction(line string) (function string, arg string) {

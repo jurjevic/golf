@@ -6,7 +6,7 @@ The *Go Language Facilitator* tool is used to process in-file code while copying
 
 ##  Install
 ```sh
-#  Version: 0.8 (work-in-progress)
+#  Version: 0.9.0-alpha
 # Required: Go 1.16+
 
 go install github.com/jurjevic/golf@latest
@@ -18,7 +18,7 @@ golf source_file target_file [-i=<file>] [-v] [-- {initialzation}]
 ```
 - `source_file` is the input file which will be processed.
 - `target_file` will be created or overwritten with the processed input.
-- `-i` is optional and includes the file for evaluation before the processing is started.
+- `-i` is optional and includes the file for evaluation before the processing is started. A local storage or HTTP/HTTPS URI is supported.
 - `-v` is optional and produces verbose outputs.
 - `--` is optional and separates the initialization code, which is interpreted before the processing starts.
 
@@ -63,7 +63,7 @@ func isSet(key string) bool
 ```
 
 ### Include files
-Go files can be included before the processing is executed. With the given example, the statement `# ### commentIf(true, line)` can be used.
+Go files can be included before the processing is executed. Files can be located from a storage or website (e.g. http://...). With the given example, the statement `# ### commentIf(true, line)` can be used.
 ```go
 package sh
 
