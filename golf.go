@@ -54,7 +54,7 @@ func doDotImport(interpreter *interp.Interpreter, pkg string) {
 	checkFail(err, "Package not found: "+pkg)
 }
 
-func (g *golf) eval(call string, line string) (result string, ok bool, repeat bool, next int64, err error) {
+func (g *golf) eval(call string, line string, fullLine string) (result string, ok bool, repeat bool, next int64, err error) {
 	// disable the repeat instruction
 	_, err = g.interpreter.Eval("repeat := false")
 	if err != nil {
@@ -68,7 +68,15 @@ func (g *golf) eval(call string, line string) (result string, ok bool, repeat bo
 	if err != nil {
 		return "", false, false, 0, err
 	}
+	_, err = g.interpreter.Eval("fline := `" + fullLine + "`")
+	if err != nil {
+		return "", false, false, 0, err
+	}
 	_, err = g.interpreter.Eval("token := Split(line, ` `)")
+	if err != nil {
+		return "", false, false, 0, err
+	}
+	_, err = g.interpreter.Eval("ftoken := Split(fline, ` `)")
 	if err != nil {
 		return "", false, false, 0, err
 	}
@@ -120,7 +128,7 @@ func (g *golf) processFile(filename string, verbose bool) string {
 			nextLines = 0
 		}
 		if len(function) > 0 {
-			result, ok, repeat, next, err := g.eval(function, arg)
+			result, ok, repeat, next, err := g.eval(function, arg, line)
 			if err == nil {
 				if verbose {
 					fmt.Printf("[%4.0d] %s\n", lineCounter, line)

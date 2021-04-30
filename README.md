@@ -42,8 +42,14 @@ If the last statement process has a `string` type result, its value is used to r
 // line represents the current line containing the string on the left side of '###'.
 var line string
 
+// fline represents the current line.
+var line string
+
 // token is the sliced line of strings splitted by whitespaces.
 var token []string
+
+// ftoken is the full line of strings splitted by whitespaces.
+var ftoken []string
 
 // repeat will execute the following line statements also for the next lines,
 // until a new statement is defined.
@@ -98,6 +104,14 @@ world // ### "hello " + line
 hello world //
 ```
 
+### Simple full line examples
+```go
+world // ### "hello " + fline
+```
+```go
+hello world // ### "hello " + fline
+```
+
 ### Simple token examples
 ```go
 hello my friend // ### token[0] + " world"
@@ -112,6 +126,14 @@ drive the rabbit home // ### token[2] = "cow"; Join(token, " ")
 ```
 ```go
 drive the cow home
+```
+
+### Replace full token examples
+```go
+drive the rabbit home // ### ftoken[2] = "cow"; Join(ftoken, " ")
+```
+```go
+drive the horse home // ### ftoken[2] = "horse"; Join(ftoken, " ")
 ```
 
 ### Advanced token examples
