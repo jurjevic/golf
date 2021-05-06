@@ -6,7 +6,7 @@ The *Go Language Facilitator* tool is used to process in-file code while copying
 
 ##  Install
 ```sh
-#  Version: 0.9.0-alpha
+#  Version: 0.10.0
 # Required: Go 1.16+
 
 go install github.com/jurjevic/golf@latest
@@ -64,12 +64,15 @@ var arg map[string]interface{}
 ```
 #### Built-in functions
 ```go
+// include the file for evaluation. This is similar with the -i option, but it is not evaluated before the processing. A local storage or HTTP/HTTPS URI is supported.
+func include(resource string)
+
 // isSet returns true if the key is found in the arg map
 func isSet(key string) bool
 ```
 
 ### Include files
-Go files can be included before the processing is executed. Files can be located from a storage or website (e.g. http://...). With the given example, the statement `# ### commentIf(true, line)` can be used.
+Go files can be included before or while the processing is executed. Files can be located from a storage or website (e.g. http://...). With the given example, the statement `# ### commentIf(true, line)` can be used.
 ```go
 package sh
 
@@ -93,6 +96,7 @@ func uncommentIf(cond bool, line string) string {
 	return line
 }
 ```
+The **Testable Example**s below provide a short tutorial for this feature.
 
 ## Examples
 
@@ -260,6 +264,27 @@ chmod +x blue.sh && ./blue.sh
 * [gen.sh](https://github.com/jurjevic/golf/blob/main/example/advanced/gen.sh) Call example for `golf` command.
 * [red.sh](https://github.com/jurjevic/golf/blob/main/example/advanced/red.sh) Input file with advanced examples.
 * [sh.go](https://github.com/jurjevic/golf/blob/main/example/advanced/sh.go) Helper functions for shell processing.
+```sh
+# run without processing
+chmod +x red.sh && ./red.sh
+
+# perform processing
+./gen.sh
+
+# run processed example
+chmod +x blue.sh && ./blue.sh
+
+# perform another processing
+./gen.sh green
+
+# run green processed example
+chmod +x green.sh && ./green.sh
+```
+
+### Testable include example
+* [gen.sh](https://github.com/jurjevic/golf/blob/main/example/include/gen.sh) Call example for `golf` command.
+* [red.sh](https://github.com/jurjevic/golf/blob/main/example/include/red.sh) Input file with advanced examples.
+* [sh.go](https://github.com/jurjevic/golf/blob/main/example/include/sh.go) Helper functions for shell processing.
 ```sh
 # run without processing
 chmod +x red.sh && ./red.sh

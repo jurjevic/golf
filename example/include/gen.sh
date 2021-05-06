@@ -13,4 +13,4 @@ fi
 go install github.com/jurjevic/golf@latest
 
 # golf blue.sh red.sh
-go run ../../*.go red.sh ${COLOR}.sh -i=sh.go -v -- 'var color string = "'$COLOR'"; var debug bool = true'
+go run ../../*.go red.sh ${COLOR}.sh -- 'var color string = "'$COLOR'"; var debug bool = true'

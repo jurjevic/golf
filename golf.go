@@ -37,6 +37,8 @@ func builtIns(interpreter *interp.Interpreter) {
 	statements := []string{
 		"var arg = make(map[string]interface{})",
 		"func isSet(key string) bool { _, ok := arg[key]; return ok }",
+		"var includes = []string{}",
+		"func include(resource string) { includes = append(includes, resource) }",
 	}
 	for _, statement := range statements {
 		_, err := interpreter.Eval(statement)
@@ -54,8 +56,12 @@ func doDotImport(interpreter *interp.Interpreter, pkg string) {
 	checkFail(err, "Package not found: "+pkg)
 }
 
-func (g *golf) eval(call string, line string, fullLine string) (result string, ok bool, repeat bool, next int64, err error) {
+func (g *golf) eval(call string, line string, fullLine string, verbose bool) (result string, ok bool, repeat bool, next int64, err error) {
 	// disable the repeat instruction
+	_, err = g.interpreter.Eval("includes = []string{}")
+	if err != nil {
+		return "", false, false, 0, err
+	}
 	_, err = g.interpreter.Eval("repeat := false")
 	if err != nil {
 		return "", false, false, 0, err
@@ -90,6 +96,16 @@ func (g *golf) eval(call string, line string, fullLine string) (result string, o
 	repeat = repeatValue.Bool()
 	nextValue, err := g.interpreter.Eval("next")
 	next = nextValue.Int()
+	includesValue, erri := g.interpreter.Eval("includes")
+	if erri != nil {
+		return "", false, false, 0, erri
+	}
+	okIncludes := includesValue.Kind() == reflect.Slice
+	if okIncludes {
+		for i := 0; i < includesValue.Len(); i++ {
+			g.include(includesValue.Index(i).String(), verbose)
+		}
+	}
 	return
 }
 
@@ -128,7 +144,7 @@ func (g *golf) processFile(filename string, verbose bool) string {
 			nextLines = 0
 		}
 		if len(function) > 0 {
-			result, ok, repeat, next, err := g.eval(function, arg, line)
+			result, ok, repeat, next, err := g.eval(function, arg, line, verbose)
 			if err == nil {
 				if verbose {
 					fmt.Printf("[%4.0d] %s\n", lineCounter, line)
