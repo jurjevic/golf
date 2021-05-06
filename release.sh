@@ -28,7 +28,7 @@ git tag -fa $tag_version -m "$tag_version release build with version increment."
 git push origin main --tags --force
 
 cd $(brew --repository jurjevic/homebrew-tap)
-download="https://github.com/jurjevic/SplitVPN/archive/$tag_version.tar.gz"
+download="https://github.com/jurjevic/golf/archive/$tag_version.tar.gz"
 wget $download
 hash=$(sha256sum $tag_version.tar.gz)
 rm "$tag_version.tar.gz"
@@ -41,4 +41,4 @@ golf Formula/golf.rb Formula/golf.rb -- '
 
 git add Formula/golf.rb
 git commit -m "golf $tag_version added."
-git push origin
+git push origin --force

@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	version = "0.9.0-alpha" // ###  ftoken[2] = "\"" + NewVersion + "\""; Join(ftoken, " ")
+	version = "0.10.0" // ###  ftoken[2] = "\"" + NewVersion + "\""; Join(ftoken, " ")
 )
 
 // golf is a line facilitator which acts like preprocessor based on the go language syntax.
